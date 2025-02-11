@@ -141,22 +141,20 @@ class SelectE(torch.nn.Module):
         f5 = f5.reshape(e1_embedded.size(0) * self.in_channel * self.out_3, 1, self.h3, self.w3)  # (48000,4,1,9)
         # (1,1500,20,20)  (48000,1,1,5)
 
-        x1 = circular_padding_chw(x, int((self.h1 - 1) // 2), int((self.w1 - 1) // 2))
+        x1 = circular_padding_chw(x, int((self.w1 - 1) // 2), int((self.h1 - 1) // 2))
         x1 = F.conv2d(x1, f1, groups=e1_embedded.size(0))  # (4,48000,20,20)
         x1 = x1.reshape(e1_embedded.size(0), self.out_1, self.reshape_H, self.reshape_W)  # (128,128,20,20)
         x1 = self.bn1_1(x1)
         x1 = self.se1(x1)
 
         x3 = circular_padding_chw(x, int((self.h2 - 1) // 2), int((self.w2 - 1) // 2))
-        x3 = F.conv2d(x3, f3, groups=e1_embedded.size(0),
-                      padding=(int((self.h2 - 1) // 2), int((self.w2 - 1) // 2)))  # (1,2560,20,20)
+        x3 = F.conv2d(x3, f3, groups=e1_embedded.size(0))  # (1,2560,20,20)
         x3 = x3.reshape(e1_embedded.size(0), self.out_2, self.reshape_H, self.reshape_W)  # (128,20,20,20)
         x3 = self.bn1_2(x3)
         x3 = self.se3(x3)
 
-        x5 = circular_padding_chw(x, int((self.h3 - 1) // 2), int((self.w3 - 1) // 2))
-        x5 = F.conv2d(x5, f5, groups=e1_embedded.size(0),
-                      padding=(int((self.h3 - 1) // 2), int((self.w3 - 1) // 2)))  # (1,1024,20,20)
+        x5 = circular_padding_chw(x, int((self.w3 - 1) // 2), int((self.h3 - 1) // 2))
+        x5 = F.conv2d(x5, f5, groups=e1_embedded.size(0))  # (1,1024,20,20)
         x5 = x5.reshape(e1_embedded.size(0), self.out_3, self.reshape_H, self.reshape_W)  # (128,8,20,20)
         x5 = self.bn1_3(x5)
         x5 = self.se5(x5)
