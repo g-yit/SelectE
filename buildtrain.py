@@ -123,7 +123,7 @@ def train_epoch(train_doubles, num_batches_per_epoch, batch_size, model, opt, sc
         with torch.no_grad():
             if epoch >= stop_start_epoch:
                 result = evaluate(model, x_valid, batch_size, target_dict)
-                if stop_num >= 20:
+                if stop_num >= 80:
                     return best_model
                 if better_than(result, previous_best):
                     stop_num = 0
