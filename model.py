@@ -76,10 +76,10 @@ class SelectE(torch.nn.Module):
             return Variable(torch.from_numpy(x).long().cuda())
 
     def init(self):
-        torch.nn.init.xavier_normal_(self.emb.weight.data)
-        torch.nn.init.xavier_normal_(self.filter1.weight.data)
-        torch.nn.init.xavier_normal_(self.filter3.weight.data)
-        torch.nn.init.xavier_normal_(self.filter5.weight.data)
+        torch.nn.init.kaiming_normal_(self.emb.weight.data)
+        torch.nn.init.kaiming_normal_(self.filter1.weight.data)
+        torch.nn.init.kaiming_normal_(self.filter3.weight.data)
+        torch.nn.init.kaiming_normal_(self.filter5.weight.data)
 
     def get_chequer_perm(self):
         ent_perm = np.int32([np.random.permutation(self.embedding_dim) for _ in range(self.perm)]) # 返回一个随机排列
@@ -168,14 +168,14 @@ class SelectE(torch.nn.Module):
         x5 = x5 * y5
 
         x = torch.cat([x1, x3, x5], dim=1)
-        x = torch.relu(x)
+        x = F.selu(x)
         x = self.feature_map_drop(x)
 
         x = x.view(x.shape[0], -1)
         x = self.fc(x)
         x = self.hidden_drop(x)
         x = self.bn2(x)
-        x = F.relu(x)
+        x = F.selu(x)
         weight = self.emb.weight
         weight = weight.transpose(1, 0)
         x = torch.mm(x, weight)
