@@ -170,7 +170,9 @@ class SelectE(torch.nn.Module):
         x = torch.cat([x1, x3, x5], dim=1)
         x = F.selu(x)
         x = self.feature_map_drop(x)
-
+        # wn18rr用selu效果好，能达到0.496
+        # fbk15237和fbk15用relu效果好
+        # KINSHIP用gelu效果好0.886
         x = x.view(x.shape[0], -1)
         x = self.fc(x)
         x = self.hidden_drop(x)
