@@ -1,0 +1,3 @@
+conda activate kge_torch
+
+python SelectE_1.py --data_path "./data" --run_folder "./" --data_name "WN18RR" --embedding_dim 200 --filter_size_list "[(1,3),(1,3),(3,3)]" --active_fn "selu" --init_fn "kaiming_normal"  --output_channel 20 --min_lr 0.00001 --batch_size 1500 --log_epoch 2 --neg_ratio 1 --input_drop 0.2 --hidden_drop 0.45 --feature_map_drop 0.2 --opt "Adam" --learning_rate 0.005 --weight_decay 5e-4 --factor 0.5 --verbose 1 --patience 5 --max_mrr 0 --epoch 300 --momentum 0.9 --save_name "./model/wn18rr.pt"
